@@ -170,7 +170,9 @@ EvPNG.fix('body, div, ul, img, li, input, a, span ,label');
                         <ul>
                             <li style="left: 20px; top: 10px; padding-left: 30px;"><a href="#" id="current" target="_blank"></a></li>
                             <li style="right: 5px; top: 5px;"><a href="javascript:;">
-                                <img id="send" src="img/send_btn.jpg"></a></li>
+                                <img id="send" src="img/send_btn.jpg"></a>
+                                <a><img id="quit" src="img/exit_btn.jpg"></a>
+                                </li>
                         </ul>
                     </div>
                 </div>
@@ -271,7 +273,8 @@ $(function(){
 	setInterval("showMessage()",3000);
 	//短轮询
     //发送按钮事件
-	$('.chat02_bar img').on('click',sendMessage);
+	$('#send').on('click',sendMessage);
+	$('#quit').on('click',userExit);
 
 	$(document).keydown(function(event){
 	    
@@ -287,11 +290,6 @@ $(function(){
 	    { 
 	       return false;
 	    }
-	 
-	    //屏蔽退格删除键 
-	    if(event.keyCode==8){
-	       return false; 
-	    }
 	        
 	    //屏蔽F5刷新键 
 	    if(event.keyCode==116){
@@ -304,6 +302,7 @@ $(function(){
 	   }
 
 	});
+
 	
 });
 
@@ -498,6 +497,7 @@ function checkUser()
 //获取当前用户
 function getCurrentUser()
 {
+	
 	$.ajax({
         url:'./lib/ChatServer1.php',
         type:'POST',
@@ -508,7 +508,7 @@ function getCurrentUser()
             if(result.status)
             {   
                 var html='';
-                $('#current').html(result.data.nickname);
+                $('#current').html('<font color="blue">我('+result.data.nickname+')</font>,<font color="green">在线</font>.');
                 $('#sid').val(result.data.id);             
             }
         },
@@ -522,27 +522,36 @@ function getCurrentUser()
 
 function userExit()
 {
-	
 	$.ajax({
         url:'./lib/ChatServer1.php',
         type:'POST',
         data:{'action':'exit'},
         dataType:'json',
+        async:false,
         success:function(result)
         {
             if(result.status)
             {   
-                layer.msg(result.message);           
+
+            	console.log(result.status);  
+            	location.href="";
+            }
+            else
+            {
+            	console.log(result.status);
+            	location.href="";
             }
         },
         error:function(xhr)
         {
+        	console.log(xhr.status);
              //layer.msg("错误提示:"+xhr.status+"->"+xhr.statusText);
         }
         
      });
     
 }
+
 
 
 

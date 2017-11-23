@@ -210,10 +210,10 @@ class ChatServer1 extends Model{
 	{
 		        //改变该用户状态为离线
 	            $user=$_SESSION['users']['nickname'];
-                $sql="update persons set status=1 where nickname='$user' limit 0;";
+                $sql="update persons set status=0 where nickname='$user' limit 1;";
                 if(parent::cud($sql)>0)
                 {
-	    	       $sql="insert into message(sender,receiver,content,addtime,status)values('1','3','$user->nickname,离开了聊天室!',now(),'1');";
+	    	       $sql="insert into message(sender,receiver,content,addtime,status)values('1','3','$user,离开了聊天室!',now(),'1');";
 	    	       parent::cud($sql);    
 	    	       session_destroy();	   
                    exit();
